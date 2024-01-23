@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: abn-dmp-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: abn-dmp-poi-gateway-app-dev
+    backstage.io/kubernetes-id: abn-dmp-poi-gateway-app
+    backstage.io/kubernetes-namespace: abn-dmp
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh-aro24/abn-dmp-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.kovj5vhc.eastus.aroapp.io/dev-pipelines/ns/abn-dmp/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.kovj5vhc.eastus.aroapp.io/k8s/ns/abn-dmp/deployments/abn-dmp-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.kovj5vhc.eastus.aroapp.io/#https://github.com/rhdh-aro24/abn-dmp-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:abn-dmp"
+  system: workshop-system-abn-dmp
+  providesApis:
+    - gateway-api-abn-dmp
+  consumesApis:
+    - backend-api-abn-dmp
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-abn-dmp
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:abn-dmp"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-abn-dmp
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: https://abn-dmp-poi-gateway-app-abn-dmp.apps.kovj5vhc.eastus.aroapp.io/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh-aro24/abn-dmp-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:abn-dmp"
+  system: workshop-system-abn-dmp
+  definition:
+    $text: https://github.com/rhdh-aro24/abn-dmp-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
